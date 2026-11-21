@@ -1,0 +1,23 @@
+id = "temet.github"
+name = "github"
+version = "0.1.0"
+min_ask_kit = "0.2.0"
+requires = ["gh"]
+says = "this repository on GitHub: pull requests, issues, CI and workflow runs, why a check failed, reviews and comments, releases; and acting on them (comment, rerun, merge, label, close)"
+keywords = ["pull requests?", "PRs?", "CI", "(PR|pull request|status|required|github) checks?", "checks? on (the|this|my) (PR|pull request|branch)", "workflow runs?", "github actions", "issues?", "releases?", "review comments?"]
+route_hint = "GitHub state (a PR, an issue, a CI run, a release) is github; the code itself is code; what a past session did about a PR is sessions"
+cite = "#<number> for a PR or issue, run <id> for a workflow run, a commit sha, or a URL"
+instructions = "instructions.md"
+state_key = "${GITHUB_REPO}"
+acts = ["gh pr comment", "gh pr merge", "gh pr review", "gh run rerun", "gh issue create", "gh issue close", "gh issue comment", "gh label"]
+
+[[settings]]
+key = "GITHUB_REPO"
+about = "the repository, as owner/name"
+detect = ["gh", "repo", "view", "--json", "nameWithOwner", "-q", ".nameWithOwner"]
+
+[[sources]]
+kind = "module"
+name = "gh"
+module = "gh.mjs"
+api = "api.d.ts"

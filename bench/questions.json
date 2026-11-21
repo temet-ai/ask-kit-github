@@ -1,0 +1,10 @@
+{
+  "about": "Questions of the kinds agents answer by hand with gh, against the public repositories temet-ai/mike and temet-ai/ask-kit. Each names its repository, because the kit otherwise answers about the repository the agent works in. Expectations are what GitHub says as of 2026-11-18.",
+  "questions": [
+    { "id": "issues-350-354", "q": "In temet-ai/mike, has the capture thread-link work in issues 350 to 354 been fixed? Which of those issues are closed and which are still open?", "expect": ["350", "351", "353", "352", "354"], "any": ["(352|354)[^.\\n]{0,80}open|open[^.\\n]{0,80}(352|354)"] },
+    { "id": "pr-387-merged", "q": "Was pull request 387 in temet-ai/mike merged, and with which merge commit?", "expect": ["merged", "5cbd16f6"] },
+    { "id": "issue-336-fix", "q": "In temet-ai/mike, did the fix for fleet_report's evidence argument (issue 336) land? Is the issue closed?", "expect": ["#?336", "closed"] },
+    { "id": "slow-queries-superseded", "q": "In temet-ai/mike, what was the slow_queries problem with a statement whose SQL was edited, and how was it fixed (issue and PR)?", "expect": ["391", "393", "6b257ece|merged"] },
+    { "id": "ci-failures-nov18", "q": "Two ci runs on main in temet-ai/ask-kit failed on 2026-11-18 around 06:06-06:08 UTC. Why did each fail, and which commits fixed them?", "expect": ["windows", "0600|0o600|mode", "CRLF|line ending|eol", "3c575da", "71126f1"] }
+  ]
+}
