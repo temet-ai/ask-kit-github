@@ -1,13 +1,14 @@
 export const meta = {
   purpose:
     "Where a pull request stands: state, branch, mergeable and review decision, each check with its result, reviews, and the review threads still unresolved with their last comment. Without `pr`, the pull request of the current branch.",
-  params: { pr: "pull request number, optional (default: the current branch's)" },
+  params: { repo: "owner/name, optional (default: the caller's repository)", pr: "pull request number, optional (default: the current branch's)" },
   returns:
     "{number, title, state, draft, author, base, head, mergeable, mergeState, reviewDecision, url, checks:{passed, failed:[{name, url}], pending:[name]}, reviews:[{author, state, at}], unresolved:[{path, line, author, last}], comments, updated}",
   example: 'await scripts.run("pr-status", { pr: 12 })',
 };
 
-export default async function ({ gh }, { pr }) {
+export default async function ({ gh }, { repo, pr }) {
+  if (repo) gh = gh.at(repo);
   const fields = ["number", "title", "state", "isDraft", "author", "baseRefName", "headRefName", "mergeable", "mergeStateStatus", "reviewDecision", "url", "statusCheckRollup", "reviews", "comments", "updatedAt"];
   const p = await gh.list("pr", "view", fields, ...(pr ? [String(pr)] : []));
   const checks = { passed: 0, failed: [], pending: [] };

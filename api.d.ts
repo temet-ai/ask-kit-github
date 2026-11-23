@@ -2,6 +2,7 @@ interface GhResult { code: number; out: string; err: string; timedOut?: boolean 
 
 declare const gh: {
   repo: string | null; // "owner/name": the repository every call is about unless you pass -R
+  at(repo: string): typeof gh; // a client for owner/name; leaves this client's default unchanged
 
   // Any gh subcommand, no shell: pass each argument separately. `-R <repo>` is added to repo-scoped
   // commands (pr, issue, run, workflow, release, label, cache, secret, variable) unless you give one.

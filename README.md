@@ -38,6 +38,8 @@ machine, and why not.
 | `GITHUB_REPO` | the repository your agent works in (`gh repo view`) | `owner/name` to pin another repository |
 
 Set it in the environment or in ask-kit's config as `domains.github.settings.GITHUB_REPO`.
+For one request about another repository, all four scripts accept `repo: "owner/name"`;
+direct calls can use `gh.at("owner/name")`. This also works outside a local git checkout.
 
 ## What it can change
 
@@ -59,3 +61,5 @@ step and error line of a run), `pr-status` (checks, reviews, unresolved threads,
 [RECIPE.md](RECIPE.md) says what it reads and runs, and how to rebuild it.
 
 MIT licence.
+
+Offline regression checks: `node test/repository.mjs` (a fake `gh`, no GitHub calls).

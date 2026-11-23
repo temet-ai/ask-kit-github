@@ -2,6 +2,7 @@ export const meta = {
   purpose:
     "Why CI failed: finds the failing run for a pull request, a branch or a run id, lists its failed jobs and steps, and pulls the error lines and the last lines of each failed job's log. Checks from outside GitHub Actions come back with their link.",
   params: {
+    repo: "owner/name, optional (default: the caller's repository)",
     pr: "pull request number, optional",
     branch: "branch name, optional (latest failed run on it)",
     run: "workflow run id, optional",
@@ -15,7 +16,8 @@ export const meta = {
 const ERR = /\b(error|failed|failure|fatal|panic|panicked|exception|traceback|assert(ion)?|cannot|could not|not found|denied|timed? ?out|exit code [1-9])\b|✗|✖|FAIL\b/i;
 const runIdOf = (url) => url?.match(/\/actions\/runs\/(\d+)/)?.[1] ?? null;
 
-export default async function ({ gh }, { pr, branch, run, lines = 25 }) {
+export default async function ({ gh }, { repo, pr, branch, run, lines = 25 }) {
+  if (repo) gh = gh.at(repo);
   let runId = run ? String(run) : null;
   const otherFailedChecks = [];
   let note = null;

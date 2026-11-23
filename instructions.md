@@ -8,8 +8,8 @@ How to work:
 - Start from a ready-made script (`scripts.run`) when one fits: `ci-failure` for why a check
   failed, `pr-status` for where a pull request stands, `find` for which PR or issue covers
   something, `activity` for a time window.
-- Ask gh for the JSON fields you need (`gh.list`) rather than reading its text output. A field
-  name you are unsure of: `gh.run("pr", "view", "--json")` prints the list.
+- For a named repository, pass `repo: "owner/name"` to scripts, or use `gh.at("owner/name")` for
+  direct calls. `gh.list("pr", "view", ["number", "title"], "12")` puts the PR number after fields.
 - For a CI failure, the deciding evidence is the log line that failed, not the job's name. Quote
   it. A test failure names the test; a build failure names the file and line.
 - A PR's checks can come from outside GitHub Actions (a status from another service); for those

@@ -1,13 +1,14 @@
 export const meta = {
   purpose:
     "What happened in the repository in a time window: pull requests merged and opened, issues opened and closed, releases, and workflow runs by result (with the failing ones named).",
-  params: { days: "how far back, default 7", branch: "only runs on this branch, optional" },
+  params: { repo: "owner/name, optional (default: the caller's repository)", days: "how far back, default 7", branch: "only runs on this branch, optional" },
   returns:
     "{since, merged:[{number, title, author, at}], opened:[...], issuesOpened:[...], issuesClosed:[...], releases:[{tag, name, at}], runs:{total, byResult, failed:[{id, workflow, branch, title, at}]}}",
   example: 'await scripts.run("activity", { days: 7 })',
 };
 
-export default async function ({ gh }, { days = 7, branch }) {
+export default async function ({ gh }, { repo, days = 7, branch }) {
+  if (repo) gh = gh.at(repo);
   const since = new Date(Date.now() - days * 86400_000).toISOString().slice(0, 10);
   const row = (x, at) => ({ number: x.number, title: x.title, author: x.author?.login, at: (x[at] ?? "").slice(0, 10) });
   const [merged, opened, issuesOpened, issuesClosed, releases, runs] = await Promise.all([

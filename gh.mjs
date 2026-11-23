@@ -59,6 +59,12 @@ export function makeGh({ repo, cwd, push }) {
   return {
     repo,
 
+    /** A separate client for a named repository; the caller's default is unchanged. */
+    at(repository) {
+      if (typeof repository !== "string" || !/^[\w.-]+\/[\w.-]+$/.test(repository)) throw new Error("gh.at needs owner/name");
+      return makeGh({ repo: repository, cwd, push });
+    },
+
     /** Any gh subcommand (no shell). -R <repo> is added for repo-scoped commands. Never throws on a non-zero exit. */
     run,
 
