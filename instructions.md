@@ -10,6 +10,7 @@ How to work:
   something, `activity` for a time window.
 - For a named repository, pass `repo: "owner/name"` to scripts, or use `gh.at("owner/name")` for
   direct calls. `gh.list("pr", "view", ["number", "title"], "12")` puts the PR number after fields.
+- Read file contents with `gh.file(path, {ref})`; its `text` is already decoded from base64.
 - For a CI failure, the deciding evidence is the log line that failed, not the job's name. Quote
   it. A test failure names the test; a build failure names the file and line.
 - A PR's checks can come from outside GitHub Actions (a status from another service); for those

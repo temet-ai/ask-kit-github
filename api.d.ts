@@ -18,6 +18,8 @@ declare const gh: {
   // The REST API. "{owner}/{repo}" in the endpoint fills in from gh.repo. fields become -f (strings)
   // or -F (numbers, booleans). paginate: every page, flattened into one array. Throws on failure.
   api(endpoint: string, o?: { method?: "GET" | "POST" | "PATCH" | "PUT" | "DELETE"; fields?: Record<string, unknown>; paginate?: boolean }): Promise<any>;
+  // One repository file as decoded UTF-8 text; ref is a branch, tag or commit (default: default branch).
+  file(path: string, o?: { ref?: string }): Promise<{ path: string; sha: string; text: string }>;
 
   // A GraphQL query; string variables go as -f, others as -F. Returns {data, errors?}. Throws on failure.
   graphql(query: string, vars?: Record<string, unknown>): Promise<any>;

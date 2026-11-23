@@ -18,6 +18,8 @@ const a = process.argv.slice(2);
 fs.appendFileSync(${JSON.stringify(logFile)}, JSON.stringify(a) + "\\n");
 if (a[0] === "api") {
   if (a[1] === "graphql") console.log(JSON.stringify({data:{repository:{pullRequest:{reviewThreads:{nodes:[]}}}}}));
+  else if (a[1].endsWith("/contents/folder")) console.log("[]");
+  else if (a[1].includes("/contents/")) console.log(JSON.stringify({type:"file",encoding:"base64",path:"src/watch lantern.mjs",sha:"1234567",content:Buffer.from("export const lantern = 'brass';\\n").toString("base64")}));
   else if (a[1].startsWith("search/")) console.log(JSON.stringify({total_count:0,items:[]}));
   else console.log(JSON.stringify({full_name:"ankh/watch"}));
 } else if (a[1] === "list") console.log("[]");
@@ -32,6 +34,9 @@ else console.log(JSON.stringify({number:12,statusCheckRollup:[],reviews:[],comme
   assert.equal(scoped.repo, "ankh/watch");
   assert.throws(() => gh.at("--help"), /owner\/name/);
   assert.equal((await scoped.api("repos/{owner}/{repo}")).full_name, "ankh/watch");
+  const read = scoped.file;
+  assert.equal((await read("src/watch lantern.mjs", { ref: "watch/lantern" })).text, "export const lantern = 'brass';\n");
+  await assert.rejects(read("folder"), /needs a file/);
   assert.match((await scoped.log(12, { failed: true })).text, /WATCH-12/);
   const failed = await ciFailure({ gh }, { repo: "ankh/watch", run: 12 });
   assert.deepEqual(failed.failedJobs[0].errors, ["failed: WATCH-12"]);
@@ -42,6 +47,7 @@ else console.log(JSON.stringify({number:12,statusCheckRollup:[],reviews:[],comme
   const calls = fs.readFileSync(logFile, "utf8").trim().split("\n").map(JSON.parse);
   for (const args of calls.filter((a) => a[0] !== "api")) assert.deepEqual(args.slice(-2), ["-R", "ankh/watch"]);
   assert.ok(calls.some((a) => a[0] === "api" && a[1] === "repos/ankh/watch"));
+  assert.ok(calls.some((a) => a[1] === "repos/ankh/watch/contents/src/watch%20lantern.mjs?ref=watch%2Flantern"));
   assert.ok(calls.some((a) => a.includes("o=ankh") && a.includes("n=watch")));
   await scoped.run("pr", "list", "-R", "ankh/guild");
   const last = JSON.parse(fs.readFileSync(logFile, "utf8").trim().split("\n").at(-1));

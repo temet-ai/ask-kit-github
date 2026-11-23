@@ -87,6 +87,15 @@ export function makeGh({ repo, cwd, push }) {
       return o.paginate && Array.isArray(out) ? out.flat() : out;
     },
 
+    /** Read one repository file without requiring a base64 decoder in the investigator. */
+    async file(file, o = {}) {
+      if (typeof file !== "string" || !file.trim()) throw new Error("gh.file needs a repository-relative file path");
+      const endpoint = `repos/{owner}/{repo}/contents/${file.split("/").map(encodeURIComponent).join("/")}${o.ref ? `?ref=${encodeURIComponent(o.ref)}` : ""}`;
+      const value = await json("api", endpoint.replace("{owner}/{repo}", repo ?? "{owner}/{repo}"));
+      if (value?.type !== "file" || value.encoding !== "base64" || typeof value.content !== "string") throw new Error("gh.file needs a file with base64 content; directories and large files need the Git blobs API");
+      return { path: value.path, sha: value.sha, text: Buffer.from(value.content, "base64").toString("utf8") };
+    },
+
     /** A GraphQL query with variables. Throws on failure. */
     async graphql(query, vars = {}) {
       const a = ["api", "graphql", "-f", `query=${query}`];

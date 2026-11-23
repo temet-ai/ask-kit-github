@@ -40,6 +40,7 @@ machine, and why not.
 Set it in the environment or in ask-kit's config as `domains.github.settings.GITHUB_REPO`.
 For one request about another repository, all four scripts accept `repo: "owner/name"`;
 direct calls can use `gh.at("owner/name")`. This also works outside a local git checkout.
+`gh.file(path, {ref})` reads one file as decoded text from a branch, tag or commit.
 
 ## What it can change
 
