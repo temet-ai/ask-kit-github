@@ -1,6 +1,6 @@
 id = "temet.github"
 name = "github"
-version = "0.1.0"
+version = "0.1.1"
 min_ask_kit = "0.2.0"
 requires = ["gh"]
 says = "this repository on GitHub: pull requests, issues, CI and workflow runs, why a check failed, reviews and comments, releases; and acting on them (comment, rerun, merge, label, close)"
